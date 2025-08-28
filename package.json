@@ -1,0 +1,47 @@
+{
+  "name": "tvcors-proxy",
+  "version": "1.0.0",
+  "description": "Independent CORS proxy service extracted from LunaTV for video streaming",
+  "main": "server.js",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "cors",
+    "proxy",
+    "video",
+    "streaming",
+    "m3u8",
+    "hls"
+  ],
+  "author": "Fitch86",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fitch86/TVCors-Proxy.git"
+  },
+  "homepage": "https://github.com/Fitch86/TVCors-Proxy",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

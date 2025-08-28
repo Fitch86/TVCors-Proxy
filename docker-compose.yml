@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  tvcors-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tvcors-proxy
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DEFAULT_USER_AGENT=AptvPlayer/1.4.10
+      - VERBOSE_LOGGING=false
+      # 域名访问控制（可选）
+      # - ALLOWED_ORIGINS=https://yourdomain.com,https://*.yourdomain.com
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - tvcors-network
+
+networks:
+  tvcors-network:
+    driver: bridge
