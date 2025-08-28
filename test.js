@@ -20,6 +20,14 @@ const testCases = [
     expectedStatus: 200
   },
   {
+    name: 'M3U代理测试',
+    path: '/api/proxy/m3u',
+    params: {
+      url: encodeURIComponent('https://httpbin.org/get')
+    },
+    expectedStatus: 200
+  },
+  {
     name: '视频片段代理测试',
     path: '/api/proxy/segment',
     params: {
@@ -169,6 +177,7 @@ async function checkServerHealth() {
  */
 async function runAllTests() {
   console.log('🚀 TVCors Proxy 功能测试开始\n');
+  console.log('📝 测试包括: M3U8代理、M3U代理、视频片段代理、密钥代理、图片代理\n');
   
   // 检查服务器是否运行
   console.log('🔍 检查服务器状态...');

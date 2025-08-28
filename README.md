@@ -5,6 +5,7 @@
 ## 功能特性
 
 - 🎯 **M3U8代理**: 支持HLS流媒体文件的代理和URL重写
+- 📺 **M3U代理**: 支持IPTV直播源列表文件的跨域代理
 - 🔑 **密钥代理**: 支持HLS加密密钥的代理
 - 🎬 **视频片段代理**: 支持TS视频片段的流式代理
 - 🖼️ **图片代理**: 支持Logo图片的代理
@@ -120,6 +121,25 @@ GET /api/proxy/logo?url={encoded_image_url}&ua={user_agent}
 ```bash
 curl "http://localhost:3001/api/proxy/logo?url=https%3A//example.com/logo.png"
 ```
+
+### M3U代理
+
+用于代理IPTV直播源列表文件，保持原始内容不进行URL重写。
+
+```
+GET /api/proxy/m3u?url={encoded_m3u_url}&ua={user_agent}
+```
+
+**参数说明:**
+- `url`: 需要代理的M3U文件URL（必需，需要URL编码）
+- `ua`: 自定义User-Agent（可选）
+
+**示例:**
+```bash
+curl "http://localhost:3001/api/proxy/m3u?url=https%3A//example.com/playlist.m3u"
+```
+
+**注意:** 此代理专注于解决CORS跨域问题，不会重写M3U文件中的URL内容，保持与LunaTV等应用的完美兼容。
 
 ## 环境变量
 
