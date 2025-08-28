@@ -9,7 +9,7 @@ export default function HomePage() {
             TVCors Proxy
           </h1>
           <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-            独立的CORS代理服务，专门用于视频流媒体的跨域代理
+            独立的CORS代理服务，支持M3U8、M3U、视频片段、密钥和图片的跨域代理
           </p>
         </div>
 
@@ -26,6 +26,22 @@ export default function HomePage() {
                 <div className="mt-3">
                   <code className="text-xs bg-gray-100 p-2 rounded block break-all">
                     GET /api/proxy/m3u8?url={"<encoded_m3u8_url>"}&allowCORS={"<true|false>"}
+                  </code>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white overflow-hidden shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  📺 M3U代理
+                </h3>
+                <div className="mt-2 max-w-xl text-sm text-gray-500">
+                  <p>支持IPTV直播源列表文件的跨域代理，保持内容原始状态</p>
+                </div>
+                <div className="mt-3">
+                  <code className="text-xs bg-gray-100 p-2 rounded block break-all">
+                    GET /api/proxy/m3u?url={"<encoded_m3u_url>"}
                   </code>
                 </div>
               </div>
@@ -117,6 +133,22 @@ export default function HomePage() {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-gray-500">支持Docker容器化部署</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <span className="text-green-500">✓</span>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-gray-500">M3U代理保持原始内容，完美兼容LunaTV</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <span className="text-green-500">✓</span>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-gray-500">支持域名访问控制和安全防护</p>
                 </div>
               </div>
             </div>
