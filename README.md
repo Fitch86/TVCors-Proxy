@@ -9,6 +9,8 @@
 - 🔑 **密钥代理**: 支持HLS加密密钥的代理
 - 🎬 **视频片段代理**: 支持TS视频片段的流式代理
 - 🖼️ **图片代理**: 支持Logo图片的代理
+- 📡 **Xtream代理**: 支持Xtream Codes API的跨域代理
+- 📱 **Stalker代理**: 支持Stalker Portal协议的跨域代理
 - 🌐 **CORS支持**: 完整的跨域资源共享支持
 - ⚡ **高性能**: 基于Next.js的现代架构
 - 🐳 **容器化**: 支持Docker部署
@@ -140,6 +142,44 @@ curl "http://localhost:3001/api/proxy/m3u?url=https%3A//example.com/playlist.m3u
 ```
 
 **注意:** 此代理专注于解决CORS跨域问题，不会重写M3U文件中的URL内容，保持与LunaTV等应用的完美兼容。
+
+### Xtream代理
+
+用于代理Xtream Codes API请求，支持IPTV服务商的API接口。
+
+```
+GET /api/proxy/xtream?url={encoded_api_url}&username={username}&password={password}&action={action}
+```
+
+**参数说明:**
+- `url`: 需要代理的Xtream API URL（必需，需要URL编码）
+- `username`: Xtream用户名（可选，透传给目标API）
+- `password`: Xtream密码（可选，透传给目标API）
+- `action`: API操作类型（可选，如get_live_streams）
+- 其他参数会透传给目标API
+
+**示例:**
+```bash
+curl "http://localhost:3001/api/proxy/xtream?url=https%3A//server.com/player_api.php&username=user&password=pass&action=get_live_categories"
+```
+
+### Stalker代理
+
+用于代理Stalker Portal请求，支持MAG盒子等STB设备的协议。
+
+```
+GET /api/proxy/stalker?url={encoded_portal_url}&macAddress={mac_address}
+```
+
+**参数说明:**
+- `url`: 需要代理的Stalker Portal URL（必需，需要URL编码）
+- `macAddress`: 设备MAC地址（可选，添加到Cookie中）
+- 其他参数会透传给目标Portal
+
+**示例:**
+```bash
+curl "http://localhost:3001/api/proxy/stalker?url=https%3A//portal.com/stalker_portal/api&macAddress=00:1A:79:XX:XX:XX"
+```
 
 ## 环境变量
 

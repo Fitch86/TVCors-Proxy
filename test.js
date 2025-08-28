@@ -50,6 +50,25 @@ const testCases = [
       url: encodeURIComponent('https://httpbin.org/image/png')
     },
     expectedStatus: 200
+  },
+  {
+    name: 'Xtream代理测试',
+    path: '/api/proxy/xtream',
+    params: {
+      url: encodeURIComponent('https://httpbin.org/get'),
+      username: 'test',
+      password: 'test'
+    },
+    expectedStatus: 200
+  },
+  {
+    name: 'Stalker代理测试',
+    path: '/api/proxy/stalker',
+    params: {
+      url: encodeURIComponent('https://httpbin.org/get'),
+      macAddress: '00:1A:79:XX:XX:XX'
+    },
+    expectedStatus: 200
   }
 ];
 
@@ -177,7 +196,7 @@ async function checkServerHealth() {
  */
 async function runAllTests() {
   console.log('🚀 TVCors Proxy 功能测试开始\n');
-  console.log('📝 测试包括: M3U8代理、M3U代理、视频片段代理、密钥代理、图片代理\n');
+  console.log('📝 测试包括: M3U8、M3U、视频片段、密钥、图片、Xtream、Stalker代理\n');
   
   // 检查服务器是否运行
   console.log('🔍 检查服务器状态...');
