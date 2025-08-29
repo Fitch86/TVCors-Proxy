@@ -29,9 +29,12 @@ export async function GET(request: Request) {
     const response = await fetch(decodedUrl, {
       headers: {
         'User-Agent': config.defaultUserAgent,
+        'Accept': 'application/x-mpegURL,audio/x-mpegurl,application/vnd.apple.mpegurl,text/plain,*/*',
       },
       cache: 'no-cache',
       redirect: 'follow',
+      // 设置超时时间为30秒
+      signal: AbortSignal.timeout(30000),
     });
 
     if (!response.ok) {
@@ -42,13 +45,26 @@ export async function GET(request: Request) {
       );
     }
 
-    const contentType = response.headers.get('content-type') || 'application/x-mpegURL';
+    const contentType = response.headers.get('content-type') || '';
     const m3uContent = await response.text();
+
+    // 判断是否为M3U/M3U8内容
+    const isM3UContent = contentType.toLowerCase().includes('mpegurl') || 
+                        contentType.toLowerCase().includes('m3u') ||
+                        m3uContent.startsWith('#EXTM3U') ||
+                        decodedUrl.toLowerCase().includes('.m3u');
 
     // 创建响应头
     const headers = new Headers();
-    headers.set('Content-Type', contentType);
+    // 强制设置正确的Content-Type for M3U files
+    if (isM3UContent) {
+      headers.set('Content-Type', 'application/x-mpegURL; charset=utf-8');
+    } else {
+      headers.set('Content-Type', contentType || 'text/plain; charset=utf-8');
+    }
     headers.set('Cache-Control', config.cacheControl.m3u8);
+    // 强制在浏览器中显示而不是下载
+    headers.set('Content-Disposition', 'inline');
     
     // 设置CORS头
     setCorsHeadersWithOrigin(headers, request, config.allowedOrigins);
@@ -61,9 +77,31 @@ export async function GET(request: Request) {
 
   } catch (error) {
     console.error('M3U proxy error:', error);
+    
+    // 提供更详细的错误信息
+    let errorMessage = 'Internal server error';
+    let statusCode = 500;
+    
+    if (error instanceof Error) {
+      if (error.name === 'AbortError' || error.message.includes('timeout')) {
+        errorMessage = 'Request timeout - The target server did not respond within 30 seconds';
+        statusCode = 504;
+      } else if (error.message.includes('fetch failed') || error.message.includes('ENOTFOUND')) {
+        errorMessage = 'Failed to connect to target server - Network error or DNS resolution failed';
+        statusCode = 502;
+      } else if (error.message.includes('ECONNREFUSED')) {
+        errorMessage = 'Connection refused by target server';
+        statusCode = 502;
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { 
+        error: errorMessage,
+        details: error instanceof Error ? error.message : 'Unknown error',
+        url: url ? decodeURIComponent(url) : 'undefined'
+      },
+      { status: statusCode }
     );
   }
 }
