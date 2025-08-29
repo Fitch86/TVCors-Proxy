@@ -5,8 +5,8 @@
  * 支持通过环境变量 PORT 设置端口
  */
 
-const { spawn } = require('child_process');
-const path = require('path');
+import { spawn } from 'child_process';
+import path from 'path';
 
 // 获取端口，默认3001
 const port = process.env.PORT || 3001;

@@ -64,30 +64,26 @@ export async function GET(request: Request) {
     // 创建响应头
     const headers = new Headers();
     
-    // 为了确保浏览器显示而不是下载，使用text/plain类型
-    // 但保留原始的Content-Type在X-Original-Content-Type头中
-    if (isM3UContent) {
-      headers.set('Content-Type', 'text/plain; charset=utf-8');
-      headers.set('X-Original-Content-Type', 'application/x-mpegURL');
-    } else {
-      headers.set('Content-Type', 'text/plain; charset=utf-8');
-    }
-    
+    // 参考用户提供的工作示例，使用JSON格式返回
+    // 这样可以避免浏览器的文件下载行为
+    headers.set('Content-Type', 'application/json; charset=utf-8');
     headers.set('Cache-Control', config.cacheControl.m3u8);
-    // 强制在浏览器中显示而不是下载
-    headers.set('Content-Disposition', 'inline; filename="playlist.m3u"');
-    
-    // 添加额外的头来帮助浏览器识别
-    headers.set('X-Content-Type-Options', 'nosniff');
     
     // 设置CORS头
     setCorsHeadersWithOrigin(headers, request, config.allowedOrigins);
 
     console.log(`Response Content-Type: ${headers.get('Content-Type')}`);
-    console.log(`Response Content-Disposition: ${headers.get('Content-Disposition')}`);
+    console.log(`Content length: ${m3uContent.length}`);
 
-    // 返回原始M3U内容，不进行任何URL重写
-    return new Response(m3uContent, {
+    // 参考用户示例，返回JSON格式: { payload: response.data }
+    const jsonResponse = {
+      payload: m3uContent,
+      contentType: contentType,
+      isM3U: isM3UContent,
+      url: decodedUrl
+    };
+
+    return new Response(JSON.stringify(jsonResponse), {
       status: 200,
       headers,
     });
