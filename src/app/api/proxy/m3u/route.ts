@@ -48,26 +48,43 @@ export async function GET(request: Request) {
     const contentType = response.headers.get('content-type') || '';
     const m3uContent = await response.text();
 
+    // 日志调试信息
+    console.log(`Original Content-Type: ${contentType}`);
+    console.log(`Content length: ${m3uContent.length}`);
+    console.log(`Content preview: ${m3uContent.substring(0, 200)}...`);
+
     // 判断是否为M3U/M3U8内容
     const isM3UContent = contentType.toLowerCase().includes('mpegurl') || 
                         contentType.toLowerCase().includes('m3u') ||
                         m3uContent.startsWith('#EXTM3U') ||
                         decodedUrl.toLowerCase().includes('.m3u');
 
+    console.log(`Is M3U Content: ${isM3UContent}`);
+
     // 创建响应头
     const headers = new Headers();
-    // 强制设置正确的Content-Type for M3U files
+    
+    // 为了确保浏览器显示而不是下载，使用text/plain类型
+    // 但保留原始的Content-Type在X-Original-Content-Type头中
     if (isM3UContent) {
-      headers.set('Content-Type', 'application/x-mpegURL; charset=utf-8');
+      headers.set('Content-Type', 'text/plain; charset=utf-8');
+      headers.set('X-Original-Content-Type', 'application/x-mpegURL');
     } else {
-      headers.set('Content-Type', contentType || 'text/plain; charset=utf-8');
+      headers.set('Content-Type', 'text/plain; charset=utf-8');
     }
+    
     headers.set('Cache-Control', config.cacheControl.m3u8);
     // 强制在浏览器中显示而不是下载
-    headers.set('Content-Disposition', 'inline');
+    headers.set('Content-Disposition', 'inline; filename="playlist.m3u"');
+    
+    // 添加额外的头来帮助浏览器识别
+    headers.set('X-Content-Type-Options', 'nosniff');
     
     // 设置CORS头
     setCorsHeadersWithOrigin(headers, request, config.allowedOrigins);
+
+    console.log(`Response Content-Type: ${headers.get('Content-Type')}`);
+    console.log(`Response Content-Disposition: ${headers.get('Content-Disposition')}`);
 
     // 返回原始M3U内容，不进行任何URL重写
     return new Response(m3uContent, {
