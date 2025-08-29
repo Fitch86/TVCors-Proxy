@@ -39,6 +39,15 @@ npm install
 
 # 启动开发服务器
 npm run dev
+
+# 或者指定端口启动（跨平台支持）
+# Windows:
+set PORT=8080 && npm run dev
+# Linux/Mac:
+PORT=8080 npm run dev
+
+# Windows 用户也可以使用批处理脚本
+start.bat
 ```
 
 服务将在 `http://localhost:3001` 启动。
@@ -51,6 +60,12 @@ npm run build
 
 # 启动生产服务器
 npm start
+
+# 指定端口启动（跨平台支持）
+# Windows:
+set PORT=8080 && npm start
+# Linux/Mac:
+PORT=8080 npm start
 ```
 
 ## API 接口
@@ -190,6 +205,31 @@ curl "http://localhost:3001/api/proxy/stalker?url=https%3A//portal.com/stalker_p
 | `DEFAULT_USER_AGENT` | 默认User-Agent | `AptvPlayer/1.4.10` |
 | `VERBOSE_LOGGING` | 启用详细日志 | `false` |
 | `ALLOWED_ORIGINS` | 允许访问的域名列表 | `""` (允许所有) |
+
+### 端口设置方法
+
+**Windows：**
+```cmd
+# 命令行设置
+set PORT=8080 && npm start
+
+# PowerShell设置
+$env:PORT=8080; npm start
+
+# 或者使用.env.local文件
+echo PORT=8080 > .env.local
+npm start
+```
+
+**Linux/Mac：**
+```bash
+# 临时设置
+PORT=8080 npm start
+
+# 或者使用.env.local文件
+echo "PORT=8080" > .env.local
+npm start
+```
 
 ### 域名访问控制
 
