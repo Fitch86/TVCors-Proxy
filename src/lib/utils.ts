@@ -252,16 +252,21 @@ export function setCorsHeadersWithOrigin(headers: Headers, request: Request, all
   const origin = request.headers.get('origin');
   
   if (origin && isOriginAllowed(request, allowedOrigins)) {
+    // 如果Origin在允许列表中，设置为该Origin
     headers.set('Access-Control-Allow-Origin', origin);
   } else {
-    // 如果来源不在允许列表中，不设置CORS头（或者设置为null）
-    headers.set('Access-Control-Allow-Origin', 'null');
+    // 如果没有Origin头或不在允许列表中，使用通配符
+    // 这对于视频片段请求很重要，因为它们可能没有Origin头
+    headers.set('Access-Control-Allow-Origin', '*');
   }
   
   headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   headers.set('Access-Control-Allow-Headers', 'Content-Type, Range, Origin, Accept');
   headers.set('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
-  headers.set('Access-Control-Allow-Credentials', 'true');
+  // 注意：当使用通配符时不能设置Credentials为true
+  if (origin && isOriginAllowed(request, allowedOrigins)) {
+    headers.set('Access-Control-Allow-Credentials', 'true');
+  }
 }
 
 /**
