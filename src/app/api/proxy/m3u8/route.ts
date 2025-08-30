@@ -144,6 +144,13 @@ function rewriteM3U8Content(content: string, baseUrl: string, req: Request, allo
   const host = req.headers.get('host');
   const proxyBase = `${protocol}://${host}/api/proxy`;
 
+  // 添加调试日志
+  logInfo('M3U8 Content Rewrite Debug', {
+    baseUrl,
+    proxyBase,
+    contentPreview: content.substring(0, 200)
+  });
+
   const lines = content.split('\n');
   const rewrittenLines: string[] = [];
 
@@ -154,6 +161,15 @@ function rewriteM3U8Content(content: string, baseUrl: string, req: Request, allo
     if (line && !line.startsWith('#')) {
       const resolvedUrl = resolveUrl(baseUrl, line);
       const proxyUrl = allowCORS ? resolvedUrl : `${proxyBase}/segment?url=${encodeURIComponent(resolvedUrl)}`;
+      
+      // 添加调试日志
+      logInfo('Segment URL Rewrite', {
+        originalSegment: line,
+        baseUrl: baseUrl,
+        resolvedUrl: resolvedUrl,
+        proxyUrl: proxyUrl
+      });
+      
       rewrittenLines.push(proxyUrl);
       continue;
     }

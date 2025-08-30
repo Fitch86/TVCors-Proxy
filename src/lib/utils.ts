@@ -116,7 +116,7 @@ export interface ProxyConfig {
  */
 export const defaultConfig: ProxyConfig = {
   defaultUserAgent: 'AptvPlayer/1.4.10',
-  enableVerboseLogging: false,
+  enableVerboseLogging: true, // 启用详细日志进行调试
   allowedOrigins: [], // 空数组表示允许所有域名
   cacheControl: {
     m3u8: 'no-cache',
@@ -192,8 +192,11 @@ export function isOriginAllowed(request: Request, allowedOrigins: string[]): boo
     // 检查是否匹配通配符模式
     for (const allowedOrigin of allowedOrigins) {
       if (allowedOrigin.includes('*')) {
-        const pattern = allowedOrigin.replace(/\*/g, '.*');
-        const regex = new RegExp(`^${pattern}$`);
+        // 转义特殊字符，然后替换 * 为 .*
+        const escapedPattern = allowedOrigin
+          .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 转义正则特殊字符
+          .replace(/\\\*/g, '.*'); // 将转义后的 \* 替换为 .*
+        const regex = new RegExp(`^${escapedPattern}$`);
         if (regex.test(origin)) {
           return true;
         }
@@ -214,8 +217,11 @@ export function isOriginAllowed(request: Request, allowedOrigins: string[]): boo
       // 检查通配符模式
       for (const allowedOrigin of allowedOrigins) {
         if (allowedOrigin.includes('*')) {
-          const pattern = allowedOrigin.replace(/\*/g, '.*');
-          const regex = new RegExp(`^${pattern}$`);
+          // 转义特殊字符，然后替换 * 为 .*
+          const escapedPattern = allowedOrigin
+            .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 转义正则特殊字符
+            .replace(/\\\*/g, '.*'); // 将转义后的 \* 替换为 .*
+          const regex = new RegExp(`^${escapedPattern}$`);
           if (regex.test(refererOrigin)) {
             return true;
           }
