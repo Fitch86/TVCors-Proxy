@@ -39,11 +39,8 @@ export async function GET(request: Request) {
     return createErrorResponse('Missing url parameter', 400, request);
   }
   
-  // 根据直播源获取特定的User-Agent
-  let ua = userAgent || config.defaultUserAgent;
-  if (source === 'Mursor') {
-    ua = 'okHttp/Mod-1.1.0'; // 使用Mursor源的特定UA
-  }
+  // 使用传递的User-Agent，如果没有则使用默认值
+  const ua = userAgent || config.defaultUserAgent;
 
   let response: Response | null = null;
   let responseUsed = false;
