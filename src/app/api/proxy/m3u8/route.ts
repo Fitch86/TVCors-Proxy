@@ -20,6 +20,7 @@ export async function GET(request: Request) {
   const url = searchParams.get('url');
   const allowCORS = searchParams.get('allowCORS') === 'true';
   const userAgent = searchParams.get('ua');
+  const source = searchParams.get('moontv-source');
   
   const config = getProxyConfig();
   
@@ -37,7 +38,12 @@ export async function GET(request: Request) {
     logError('Missing URL parameter');
     return createErrorResponse('Missing url parameter', 400, request);
   }
-  const ua = userAgent || config.defaultUserAgent;
+  
+  // 根据直播源获取特定的User-Agent
+  let ua = userAgent || config.defaultUserAgent;
+  if (source === 'Mursor') {
+    ua = 'okHttp/Mod-1.1.0'; // 使用Mursor源的特定UA
+  }
 
   let response: Response | null = null;
   let responseUsed = false;

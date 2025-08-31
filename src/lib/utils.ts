@@ -287,7 +287,7 @@ export function setCorsHeaders(headers: Headers): void {
  * @param request 请求对象（可选，用于域名验证）
  * @returns Response对象
  */
-export function createErrorResponse(message: string, status: number = 500, request?: Request): Response {
+export function createErrorResponse(message: string, status = 500, request?: Request): Response {
   const headers = new Headers();
   
   if (request) {
