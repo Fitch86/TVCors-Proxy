@@ -21,7 +21,10 @@ export async function GET(request: Request) {
   const config = getProxyConfig();
   
   // 验证域名访问权限
-  if (config.allowedOrigins.length > 0 && !isOriginAllowed(request, config.allowedOrigins)) {
+  // 仅当请求包含 Origin 或 Referer 时才严格校验；
+  // 某些片段请求可能不带这些头，此时不阻断，仅通过下方的CORS响应头进行控制。
+  const hasOriginOrReferer = !!(request.headers.get('origin') || request.headers.get('referer'));
+  if (config.allowedOrigins.length > 0 && hasOriginOrReferer && !isOriginAllowed(request, config.allowedOrigins)) {
     logError('Access denied: Origin not allowed');
     return createErrorResponse('Access denied: Origin not allowed', 403, request);
   }
