@@ -217,12 +217,16 @@ export function isOriginAllowed(request: Request, allowedOrigins: string[]): boo
       // 检查通配符模式
       for (const allowedOrigin of allowedOrigins) {
         if (allowedOrigin.includes('*')) {
-          // 转义特殊字符，然后替换 * 为 .*
-          const escapedPattern = allowedOrigin
-            .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 转义正则特殊字符
-            .replace(/\\\*/g, '.*'); // 将转义后的 \* 替换为 .*
-          const regex = new RegExp(`^${escapedPattern}$`);
+          // 改进的通配符处理：将 * 替换为匹配任意字符的正则表达式
+          // 先转义所有正则特殊字符，但保留 * 不转义
+          let pattern = allowedOrigin
+            .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 转义正则特殊字符，但不包括 *
+            .replace(/\*/g, '.*'); // 将 * 替换为 .*
+          
+          const regex = new RegExp(`^${pattern}$`);
+          console.log(`[Origin Debug] Testing wildcard pattern for referer: ${allowedOrigin} -> ${pattern} against ${refererOrigin}`);
           if (regex.test(refererOrigin)) {
+            console.log(`[Origin Debug] Wildcard match found for referer origin: ${refererOrigin}`);
             return true;
           }
         }
