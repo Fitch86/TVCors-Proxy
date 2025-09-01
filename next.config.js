@@ -7,20 +7,7 @@ const nextConfig = {
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
-  // 支持 CORS 跨域
-  async headers() {
-    return [
-      {
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Range, Origin, Accept' },
-          { key: 'Access-Control-Expose-Headers', value: 'Content-Length, Content-Range' },
-        ],
-      },
-    ];
-  },
+  // CORS 跨域现在由各个路由处理器动态处理，基于 ALLOWED_ORIGINS 配置
 };
 
 export default nextConfig;
