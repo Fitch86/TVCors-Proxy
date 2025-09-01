@@ -250,21 +250,27 @@ export function setCorsHeadersWithOrigin(headers: Headers, request: Request, all
   
   // 获取请求来源
   const origin = request.headers.get('origin');
+  const isAllowed = origin ? isOriginAllowed(request, allowedOrigins) : false;
   
-  if (origin && isOriginAllowed(request, allowedOrigins)) {
+  // 调试日志
+  console.log(`[CORS Debug] Origin: ${origin}, Allowed Origins: ${allowedOrigins.join(',')}, Is Allowed: ${isAllowed}`);
+  
+  if (origin && isAllowed) {
     // 如果Origin在允许列表中，设置为该Origin
     headers.set('Access-Control-Allow-Origin', origin);
+    console.log(`[CORS Debug] Set Access-Control-Allow-Origin to: ${origin}`);
   } else {
     // 如果没有Origin头或不在允许列表中，使用通配符
     // 这对于视频片段请求很重要，因为它们可能没有Origin头
     headers.set('Access-Control-Allow-Origin', '*');
+    console.log(`[CORS Debug] Set Access-Control-Allow-Origin to: *`);
   }
   
   headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   headers.set('Access-Control-Allow-Headers', 'Content-Type, Range, Origin, Accept');
   headers.set('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
   // 注意：当使用通配符时不能设置Credentials为true
-  if (origin && isOriginAllowed(request, allowedOrigins)) {
+  if (origin && isAllowed) {
     headers.set('Access-Control-Allow-Credentials', 'true');
   }
 }
