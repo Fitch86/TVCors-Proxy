@@ -421,6 +421,8 @@ docker run -e VERBOSE_LOGGING=true -p 3001:3001 tvcors-proxy
 4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 创建 Pull Request
 
+## [![DeepWiki Index](https://deepwiki.com/badge.svg)](https://deepwiki.com/{org}/{repo})
+
 ## 许可证
 
 MIT License - 详见 [LICENSE](LICENSE) 文件
