@@ -1,4 +1,4 @@
-# TVCors Proxy
+# TVCors Proxy  [![DeepWiki Index](https://deepwiki.com/badge.svg)](https://deepwiki.com/Fitch86/TVCors-Proxy)
 
 一个独立的 CORS 代理服务，从 LunaTV 项目中分离出来，专门用于视频流媒体的跨域代理。
 
@@ -420,8 +420,6 @@ docker run -e VERBOSE_LOGGING=true -p 3001:3001 tvcors-proxy
 3. 提交更改 (`git commit -m 'Add some amazing feature'`)
 4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 创建 Pull Request
-
-## [![DeepWiki Index](https://deepwiki.com/badge.svg)](https://deepwiki.com/{org}/{repo})
 
 ## 许可证
 
